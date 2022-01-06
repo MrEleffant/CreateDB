@@ -1,0 +1,23 @@
+{
+  "name": "createdb",
+  "version": "1.0.0",
+  "description": "CreateDbFrom Discord",
+  "main": "CreateDB.js",
+  "scripts": {
+    "test": "?db"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrEleffant/CreateDB.git"
+  },
+  "author": "MrEleffant",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrEleffant/CreateDB/issues"
+  },
+  "homepage": "https://github.com/MrEleffant/CreateDB#readme",
+  "dependencies": {
+    "discord.js": "^12.0.0",
+    "dotenv": "^10.0.0"
+  }
+}
