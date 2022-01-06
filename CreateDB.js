@@ -10,7 +10,7 @@ client.login(process.env.TOKEN)
 client.on('message', (message) => {
     const dbChann = '928597107441561610'
     if(message.channel.id == dbChann) {
-        const content = message.content.split('-')
+        const content = message.content.split('>')
         const question = content[0]
         const response = content[1] || false
         if (db[question] || !response ) {
