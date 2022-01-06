@@ -12,9 +12,10 @@ client.on('message', (message) => {
     if(message.channel.id == dbChann) {
         const content = message.content.split('-')
         const question = content[0]
-        const response = content[1]
-        if (db[question]) {
+        const response = content[1] || false
+        if (db[question] || !response ) {
             message.react('❌')
+            message.delete({timeout: 5000})
             return
         } else {
             message.react('✅')
