@@ -18,3 +18,8 @@ changer l'id du salon
 créer le fichier .dotenv
 qui contiendra TOKEN=TOKEN
 ```
+ajouter 
+la db
+```
+./db.json
+```
