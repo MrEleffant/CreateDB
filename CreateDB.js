@@ -7,18 +7,31 @@ const db = require('./db.json')
 
 client.login(process.env.TOKEN)
 
+const dbChann = '928597107441561610'
+
+client.on('ready', () => {
+    console.log(client.user.username)
+    setInterval(() => {
+        client.user.setActivity(`La base de données comporte : ${Object.keys(db).length} mots`, { type: "PLAYING" })
+    }, 10000);
+})
+
 client.on('message', (message) => {
-    const dbChann = '928597107441561610'
+    if(message.author.bot) return
     if(message.channel.id == dbChann) {
         const content = message.content.split('>')
         const question = content[0]
         const response = content[1] || false
-        if (db[question] || !response ) {
+        if (!response) {
             message.react('❌')
             message.delete({timeout: 5000})
             return
         } else {
             message.react('✅')
+            if(db[question]) {
+                message.react('✏️')
+                message.channel.send(`Ancienne réponse: "${db[question]}"`)
+            }
             db[question] = response
             writeJsonFileUTF8("./db.json", db);
         }
