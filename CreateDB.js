@@ -10,6 +10,16 @@ client.login(process.env.TOKEN)
 
 client.on('ready', () => {
     console.log(client.user.username)
+    const chann = "938828626131054622"
+    const tuto = new Discord.MessageEmbed()
+        .setTitle('Commandes')
+        .addFields(
+            { name: "Créer une DB", value: `Allez dans <#${config.commande}> et tappez la commande \`?createdb [nom de votre choix]\`\n*Un channel et un role associé vous sera donné*` },
+            { name: "Rejoindre une DB", value: `Allez dans <#${config.commande}> et tappez la commande \`?join [code de la DB]\`\nCe code devra vous être donné par le propriétaire de la DB\n*Un channel et un role associé vous sera donné*` },
+        )
+        .setColor('#4999dd')
+
+    // client.channels.cache.get(chann).send(tuto)
 })
 
 client.on('message', async (message) => {
@@ -19,6 +29,7 @@ client.on('message', async (message) => {
         const args = commande.split(" ")
         switch (args[0]) {
             case "createdb": {
+                if(message.channel.id != config.commande) break
                 message.delete();
                 // check si nom donné à la db
                 if (!args[1]) {
@@ -72,9 +83,10 @@ client.on('message', async (message) => {
                         .addFields(
                             { name: "?add [tag/id]", value: "Ajouter quelqu'un à la DB" },
                             { name: "?remove [tag/id]", value: "Supprimer quelqu'un de la DB" },
-                            { name: "?get", value: "recevoir le json de la base de donnée" },
+                            { name: "?get", value: "Recevoir le json de la DB" },
                             { name: "?delete", value: "Supprimer la DB" },
-                            { name: "?join [code]", value: "Permet de join une base de donnée" }
+                            { name: "?separator [sep]", value: "Permet de changer le séparateur\n`>` par défaut" },
+                            { name: "?join [code]", value: "Permet de join une DB" }
                         )
                         .setColor('#4999dd')
                         .setTimestamp()
@@ -83,7 +95,7 @@ client.on('message', async (message) => {
                 // envoi du code en mp
                 const codeMp = new Discord.MessageEmbed()
                     .setTitle('Create DB')
-                    .setDescription(`Voilà le code de ta base de donnée \`${dbName}\`: \`${code}\`\n<#${chanId.id}>`)
+                    .setDescription(`Voilà le code de ta base de donnée : \`${code}\`\n<#${chanId.id}>`)
                     .setColor('#4999dd')
                     .setTimestamp()
                 message.author.send(codeMp).catch(e => {
@@ -97,7 +109,8 @@ client.on('message', async (message) => {
                     dbName: dbName,
                     channel: chanId.id,
                     owner: message.author.id,
-                    role: roleID
+                    role: roleID,
+                    separator: ">"
                 }
                 writeJsonFileUTF8('./dbManager.json', dbManager);
 
@@ -105,26 +118,43 @@ client.on('message', async (message) => {
 
                 break;
             }
+
             case "delete": {
+                if(message.channel.parentID != config.dbCat) break
                 const code = message.channel.topic
-                if (message.author.id != dbManager[code]?.owner) return
+                if (message.author.id != dbManager[code]?.owner) {
+                    message.channel.send('Désolé mais seul la personne qui a créé cette DB peut faire ça.')
+                    return
+                }
                 message.guild.channels.cache.get(dbManager[code].channel).delete()
                 message.guild.roles.cache.get(dbManager[code].role).delete()
-                fs.unlink(`./db/${code}.json`)
-
+                
                 delete dbManager[code]
                 writeJsonFileUTF8('./dbManager.json', dbManager);
-
+                
+                try {
+                    fs.unlinkSync(`./db/${code}.json`)
+                    //file removed
+                  } catch(err) {
+                    console.error(err)
+                  }
                 break;
             }
+
             case "get": {
+                if(message.channel.parentID != config.dbCat) break
+                message.delete()
                 message.channel.send({files: [`./db/${message.channel.topic}.json`]})
                 break;
             }
 
             case "add": {
+                if(message.channel.parentID != config.dbCat) break
                 const code = message.channel.topic
-                if (message.author.id != dbManager[code]?.owner) return
+                if (message.author.id != dbManager[code]?.owner) {
+                    message.channel.send('Désolé mais seul la personne qui a créé cette DB peut faire ça.')
+                    return
+                }
                 let target = message?.mentions?.users?.first() || args[1]
                 if(!target){
                     message.reply('Merci de tagg ou de me donner un id valide')
@@ -132,10 +162,16 @@ client.on('message', async (message) => {
                 }
                 message.guild.member(target).roles.add(dbManager[code].role)
                 message.react("✅")
+                break;
             }
+
             case "remove": {
+                if(message.channel.parentID != config.dbCat) break
                 const code = message.channel.topic
-                if (message.author.id != dbManager[code]?.owner) return
+                if (message.author.id != dbManager[code]?.owner) {
+                    message.channel.send('Désolé mais seul la personne qui a créé cette DB peut faire ça.')
+                    return
+                }
                 let target = message?.mentions?.users?.first() || args[1]
                 if(!target){
                     message.reply('Merci de tagg ou de me donner un id valide')
@@ -143,6 +179,38 @@ client.on('message', async (message) => {
                 }
                 message.guild.member(target).roles.remove(dbManager[code].role)
                 message.react("✅")
+                break;
+            }
+            
+            case "join": {
+                if(message.channel.id != config.commande) break
+                
+                message.delete()
+                const code=args[1]
+                if(dbManager[code]) {
+                    message.member.roles.add(dbManager[code].role)
+                } 
+                break;
+            }
+
+            case "separator": {
+                if(message.channel.parentID != config.dbCat) break
+                const code = message.channel.topic
+                if (message.author.id != dbManager[code]?.owner) {
+                    message.channel.send('Désolé mais seul la personne qui a créé cette DB peut faire ça.')
+                    return
+                }
+                if(!args[1]) {
+                    message.channel.send('Merci de me donner un séparateur')
+                    return
+                }
+                
+                dbManager[code].separator = args[1]
+                writeJsonFileUTF8('./dbManager.json', dbManager);
+
+                message.react("✅")
+                message.channel.send(`Le nouveau séparateur est : \`${dbManager[code].separator}\``)
+                break;
             }
 
             default: {
@@ -152,13 +220,14 @@ client.on('message', async (message) => {
 
     } else {
         if (message.channel.parentID == config.dbCat) {
-            const dbPath = `./db/${message.channel.topic}.json`
+            const code = message.channel.topic
+            const dbPath = `./db/${code}.json`
             if (!exists(dbPath)) {
                 const content = {}
                 fs.writeFileSync(dbPath, JSON.stringify(content))
             }
             const db = require(dbPath)
-            const content = message.content.split('>')
+            const content = message.content.split(dbManager[code].separator)
             const question = content[0]
             const response = content[1] || false
             if (!response) {
