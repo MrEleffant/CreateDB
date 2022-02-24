@@ -227,22 +227,28 @@ client.on('message', async (message) => {
                 fs.writeFileSync(dbPath, JSON.stringify(content))
             }
             const db = require(dbPath)
-            const content = message.content.split(dbManager[code].separator)
-            const question = content[0]
-            const response = content[1] || false
-            if (!response) {
-                message.react('❌')
-                message.delete({ timeout: 5000 })
-                return
-            } else {
-                message.react('✅')
-                if (db[question]) {
-                    message.react('✏️')
-                    message.channel.send(`Ancienne réponse: "${db[question]}"`)
+            message.delete()
+            message.content.split("\n").forEach(ligne => {
+                const content = ligne.split(dbManager[code].separator)
+                const question = content[0].trimEnd().trimStart()
+                const response = content[1].trimEnd().trimStart() || false
+                if (!response) {
+                    message.channel.send("`"+question+"`>`"+response+"`").then(msg => {
+                        msg.react('❌')
+                    })
+                    message.delete({ timeout: 5000 })
+                    return
+                } else {
+                    if (db[question]) {
+                        message.channel.send(`Ancienne réponse: "${db[question]}"`)
+                    }
+                    db[question] = response
+                    message.channel.send("`"+question+"`>`"+response+"`").then(msg => {
+                        msg.react('✅')
+                    })
                 }
-                db[question] = response
-                writeJsonFileUTF8(dbPath, db);
-            }
+            })
+            writeJsonFileUTF8(dbPath, db);
             return
         }
     }

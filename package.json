@@ -18,6 +18,12 @@
   "homepage": "https://github.com/MrEleffant/CreateDB#readme",
   "dependencies": {
     "discord.js": "^12.0.0",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "exists": "^1.0.1",
+    "lib": "^4.3.3",
+    "library-utils": "^3.2.0",
+    "update": "^0.7.4",
+    "util": "^0.12.4",
+    "utils": "^0.3.1"
   }
 }
