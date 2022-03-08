@@ -9,15 +9,15 @@ client.login(process.env.TOKEN)
 
 
 client.on('ready', () => {
-    console.log(client.user.username)
-    const chann = "938828626131054622"
-    const tuto = new Discord.MessageEmbed()
-        .setTitle('Commandes')
-        .addFields(
-            { name: "Créer une DB", value: `Allez dans <#${config.commande}> et tappez la commande \`?createdb [nom de votre choix]\`\n*Un channel et un role associé vous sera donné*` },
-            { name: "Rejoindre une DB", value: `Allez dans <#${config.commande}> et tappez la commande \`?join [code de la DB]\`\nCe code devra vous être donné par le propriétaire de la DB\n*Un channel et un role associé vous sera donné*` },
-        )
-        .setColor('#4999dd')
+    console.log(client.user.username + " online")
+    // const chann = "938828626131054622"
+    // const tuto = new Discord.MessageEmbed()
+    //     .setTitle('Commandes')
+    //     .addFields(
+    //         { name: "Créer une DB", value: `Allez dans <#${config.commande}> et tappez la commande \`?createdb [nom de votre choix]\`\n*Un channel et un role associé vous sera donné*` },
+    //         { name: "Rejoindre une DB", value: `Allez dans <#${config.commande}> et tappez la commande \`?join [code de la DB]\`\nCe code devra vous être donné par le propriétaire de la DB\n*Un channel et un role associé vous sera donné*` },
+    //     )
+    //     .setColor('#4999dd')
 
     // client.channels.cache.get(chann).send(tuto)
 })
@@ -90,6 +90,7 @@ client.on('message', async (message) => {
                         )
                         .setColor('#4999dd')
                         .setTimestamp()
+                        .setFooter("Code : " + code)
                     chann.send(commandes)
                 })
                 // envoi du code en mp
@@ -271,7 +272,7 @@ function generate(l) {
     var c = 'abcdefghijknopqrstuvwxyzACDEFGHJKLMNPQRSTUVWXYZ12345679',
         n = c.length,
         /* p : chaîne de caractères spéciaux */
-        p = '!@#$+-*&_',
+        p = '_',
         o = p.length,
         r = '',
         n = c.length,
