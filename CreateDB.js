@@ -10,7 +10,7 @@ client.login(process.env.TOKEN)
 
 client.on('ready', () => {
     console.log(client.user.username + " online")
-    // const chann = "938828626131054622"
+    const chann = "951238634101669889"
     // const tuto = new Discord.MessageEmbed()
     //     .setTitle('Commandes')
     //     .addFields(
@@ -18,8 +18,25 @@ client.on('ready', () => {
     //         { name: "Rejoindre une DB", value: `Allez dans <#${config.commande}> et tappez la commande \`?join [code de la DB]\`\nCe code devra vous être donné par le propriétaire de la DB\n*Un channel et un role associé vous sera donné*` },
     //     )
     //     .setColor('#4999dd')
+    // const regles = new Discord.MessageEmbed()
+    //     .setTitle('Règles')
+    //     .addFields(
+    //         { name: "1", value: `Traitez tout le monde avec respect. Aucun harcèlement, chasse aux sorcières, sexisme, racisme ou discours de haine ne sera toléré.` },
+    //         { name: "2", value: `Pas de spam ni d'autopromotion (invitations de serveurs, publicités, etc.) sans l'autorisation d'un modérateur du serveur, y compris via les MP envoyés aux autres membres.` },
+    //         { name: "3", value: `Si tu remarques quelque chose de contraire aux règles ou qui te met dans un sentiment d'insécurité, informe-en les modérateurs. Nous voulons que ce serveur soit accueillant pour tout le monde !` },
+    //         { name: "4", value: `Pas de spam de DB, ou de requêtes sous peine d'être **ban et blacklist**` },
+    //     )
+    //     .setColor('#4999dd')
+    // const premium = new Discord.MessageEmbed()
+    //     .setTitle('Premium')
+    //     .addFields(
+    //         { name: "Fonctionnalité", value: `Permet de changer le code de la DB` },
+    //         { name: "Obtention", value: `Soyez impliqué et utilisez l'extension` }
+            
+    //     )
+    //     .setColor(client.channels.cache.get(chann).guild.roles.cache.get(config.premium).color)
 
-    // client.channels.cache.get(chann).send(tuto)
+    // client.channels.cache.get(chann).send(premium)
 })
 
 client.on('message', async (message) => {
