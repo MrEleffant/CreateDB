@@ -91,6 +91,9 @@ client.on('message', async (message) => {
                         .setColor('#4999dd')
                         .setTimestamp()
                         .setFooter("Code : " + code)
+                        if(message.member.roles.cache.has(config.premium)) {
+                            commandes.addField("?code [code de 7 carractères]", `Permet de changer le code de la DB, Accessible seulement aux <@&${config.premium}>`)
+                        }
                     chann.send(commandes)
                 })
                 // envoi du code en mp
@@ -123,12 +126,12 @@ client.on('message', async (message) => {
             case "delete": {
                 if(message.channel.parentID != config.dbCat) break
                 const code = message.channel.topic
-                if (message.author.id != dbManager[code]?.owner) {
+                if (message.author.id != dbManager[code]?.owner && !message.member.permissions.has("ADMINISTRATOR")) {
                     message.channel.send('Désolé mais seul la personne qui a créé cette DB peut faire ça.')
                     return
                 }
-                message.guild.channels.cache.get(dbManager[code].channel).delete()
-                message.guild.roles.cache.get(dbManager[code].role).delete()
+                message.guild.channels.cache.get(dbManager[code].channel).delete().catch(e => console.log(e))
+                message.guild.roles.cache.get(dbManager[code].role).delete().catch(e => console.log(e))
                 
                 delete dbManager[code]
                 writeJsonFileUTF8('./dbManager.json', dbManager);
@@ -214,6 +217,43 @@ client.on('message', async (message) => {
                 break;
             }
 
+            case "code": {
+                if(message.channel.parentID != config.dbCat) break
+                const code = message.channel.topic
+                if (message.author.id != dbManager[code]?.owner) {
+                    message.channel.send('Désolé mais seul la personne qui a créé cette DB peut faire ça.')
+                    return
+                }
+                if(!message.member.roles.cache.has(config.premium)) {
+                    message.channel.send('Désolé mais seul les premiums ont accès à cette commande.')
+                    return    
+                }
+
+                if(!args[1] || args[1]?.length != 7) {
+                    message.channel.send('Merci de me donner un nouveau code de DB de 7 carractères.')
+                    return
+                }
+                const newcode  = args[1]
+                if(fs.existsSync(`./db/${newcode}.json`)) {
+                    message.channel.send('Désolé mais ce code de DB est déjà utilisé.')
+                    return
+                }
+                dbManager[newcode] = dbManager[code]
+                delete dbManager[code]
+                writeJsonFileUTF8('./dbManager.json', dbManager);
+
+                fs.rename(`./db/${code}.json`, `./db/${newcode}.json`, () => {
+                    console.log('db renamed')
+                })
+                message.channel.setTopic(newcode)
+
+
+
+                message.react("✅")
+                message.channel.send(`Le nouveau code de la DB est \`${newcode}\``)
+                break
+            }
+
             default: {
                 break;
             }
@@ -228,16 +268,16 @@ client.on('message', async (message) => {
                 fs.writeFileSync(dbPath, JSON.stringify(content))
             }
             const db = require(dbPath)
-            message.delete()
             message.content.split("\n").forEach(ligne => {
                 const content = ligne.split(dbManager[code].separator)
-                const question = content[0].trimEnd().trimStart()
-                const response = content[1].trimEnd().trimStart() || false
+                if(!content[1]) return
+                message.delete().catch(e => console.log(e))
+                const question = content[0]?.trimEnd().trimStart()
+                const response = content[1]?.trimEnd()?.trimStart() || false
                 if (!response) {
                     message.channel.send("`"+question+"`>`"+response+"`").then(msg => {
                         msg.react('❌')
                     })
-                    message.delete({ timeout: 5000 })
                     return
                 } else {
                     if (db[question]) {
