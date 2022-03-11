@@ -318,7 +318,7 @@ client.on('message', async (message) => {
                     return
                 } else {
                     if (db[question]) {
-                        message.channel.send(`Ancienne réponse: "${db[question]}"`)
+                        message.channel.send(`Ancienne réponse: \`${db[question]}\``)
                     }
                     db[question] = response
                     message.channel.send("`"+question+"`>`"+response+"`").then(msg => {
