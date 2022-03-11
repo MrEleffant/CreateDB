@@ -10,7 +10,7 @@ client.login(process.env.TOKEN)
 
 client.on('ready', () => {
     console.log(client.user.username + " online")
-    const chann = "951238634101669889"
+    const chann = "951237154225401866"
     // const tuto = new Discord.MessageEmbed()
     //     .setTitle('Commandes')
     //     .addFields(
@@ -35,8 +35,28 @@ client.on('ready', () => {
             
     //     )
     //     .setColor(client.channels.cache.get(chann).guild.roles.cache.get(config.premium).color)
+    const install = new Discord.MessageEmbed()
+        .setTitle('Guide d\'installation')
+        .addFields(
+            { name: "1", value: `Ajoutez l'extension chrome [Ajouter l'extension](https://chrome.google.com/webstore/detail/ctrlconverter/ijlnogmehhnikphdellobhngfdggfkjm?hl=fr&authuser=0)` },
+            { name: "2", value: `Complétez l'installation` },
+            { name: "Faculltatif", value: `Épinglez l'extension pour y avoir accès plus simplement` }
+            
+        )
+        .setColor("#4999dd")
 
-    // client.channels.cache.get(chann).send(premium)
+    const util = new Discord.MessageEmbed()
+        .setTitle('Guide d\'utilisation')
+        .addFields(
+            { name: "1", value: `Complétez votre DB* voir <#938828626131054622>` },
+            { name: "2", value: `Accédez à l'extension` },
+            { name: "3", value: `Rentrez votre code de DB dans l'extension lorsqu'elle est terminée` },
+            { name: "4", value: `Choisissez votre mode de fonctionnement:\nCtrl+C: remplacement du presse papier lors du copier` }
+        )
+        .setColor("#4999dd")
+        .setFooter("DB: Base de donnée")
+
+    client.channels.cache.get(chann).send(util)
 })
 
 client.on('message', async (message) => {
