@@ -1,8 +1,5 @@
-import os
-from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file, send_from_directory, safe_join, abort
+from flask import Flask, request, abort
 from flask_cors import CORS
-import json
-import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -24,4 +21,4 @@ def sendData():
 
 if __name__ == "__main__":
     print("API de backend de l'extension chrome CtrlConverter")
-    app.run(host="0.0.0.0", port=4000)
+    app.run(host="0.0.0.0", port=16384)
