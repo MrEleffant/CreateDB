@@ -10,53 +10,6 @@ client.login(process.env.TOKEN)
 
 client.on('ready', () => {
     console.log(client.user.username + " online")
-    const chann = "951237154225401866"
-    // const tuto = new Discord.MessageEmbed()
-    //     .setTitle('Commandes')
-    //     .addFields(
-    //         { name: "Créer une DB", value: `Allez dans <#${config.commande}> et tappez la commande \`?createdb [nom de votre choix]\`\n*Un channel et un role associé vous sera donné*` },
-    //         { name: "Rejoindre une DB", value: `Allez dans <#${config.commande}> et tappez la commande \`?join [code de la DB]\`\nCe code devra vous être donné par le propriétaire de la DB\n*Un channel et un role associé vous sera donné*` },
-    //     )
-    //     .setColor('#4999dd')
-    // const regles = new Discord.MessageEmbed()
-    //     .setTitle('Règles')
-    //     .addFields(
-    //         { name: "1", value: `Traitez tout le monde avec respect. Aucun harcèlement, chasse aux sorcières, sexisme, racisme ou discours de haine ne sera toléré.` },
-    //         { name: "2", value: `Pas de spam ni d'autopromotion (invitations de serveurs, publicités, etc.) sans l'autorisation d'un modérateur du serveur, y compris via les MP envoyés aux autres membres.` },
-    //         { name: "3", value: `Si tu remarques quelque chose de contraire aux règles ou qui te met dans un sentiment d'insécurité, informe-en les modérateurs. Nous voulons que ce serveur soit accueillant pour tout le monde !` },
-    //         { name: "4", value: `Pas de spam de DB, ou de requêtes sous peine d'être **ban et blacklist**` },
-    //     )
-    //     .setColor('#4999dd')
-    // const premium = new Discord.MessageEmbed()
-    //     .setTitle('Premium')
-    //     .addFields(
-    //         { name: "Fonctionnalité", value: `Permet de changer le code de la DB` },
-    //         { name: "Obtention", value: `Soyez impliqué et utilisez l'extension` }
-            
-    //     )
-    //     .setColor(client.channels.cache.get(chann).guild.roles.cache.get(config.premium).color)
-    const install = new Discord.MessageEmbed()
-        .setTitle('Guide d\'installation')
-        .addFields(
-            { name: "1", value: `Ajoutez l'extension chrome [Ajouter l'extension](https://chrome.google.com/webstore/detail/ctrlconverter/ijlnogmehhnikphdellobhngfdggfkjm?hl=fr&authuser=0)` },
-            { name: "2", value: `Complétez l'installation` },
-            { name: "Faculltatif", value: `Épinglez l'extension pour y avoir accès plus simplement` }
-            
-        )
-        .setColor("#4999dd")
-
-    const util = new Discord.MessageEmbed()
-        .setTitle('Guide d\'utilisation')
-        .addFields(
-            { name: "1", value: `Complétez votre DB* voir <#938828626131054622>` },
-            { name: "2", value: `Accédez à l'extension` },
-            { name: "3", value: `Rentrez votre code de DB dans l'extension lorsqu'elle est terminée` },
-            { name: "4", value: `Choisissez votre mode de fonctionnement:\nCtrl+C: remplacement du presse papier lors du copier` }
-        )
-        .setColor("#4999dd")
-        .setFooter("DB: Base de donnée")
-
-    client.channels.cache.get(chann).send(util)
 })
 
 client.on('message', async (message) => {
